@@ -1,4 +1,5 @@
 const config = require('../../../../config.js')
+const gameModes = require('../../../../utils/csv')('csv_logic/game_modes.csv')
 
 module.exports.decode = buffer => {
     let json = { unks: [] }
@@ -20,7 +21,9 @@ module.exports.decode = buffer => {
         json.unks.push(buffer.readByte())
     }
 
-    json.gameMode = buffer.readRrsInt32() * 1000000 + buffer.readRrsInt32()
+    let file = buffer.readRrsInt32()
+    let row = buffer.readRrsInt32()
+    json.gameMode = file * 1000000 + row
     json.type = buffer.readByte()
 
     switch(json.type) {
@@ -29,7 +32,7 @@ module.exports.decode = buffer => {
 
         case 2: // special event live
             // these are the TvT Friendly game modes
-            if(config.gameModes && config.gameModes[json.gameMode] && config.gameModes[json.gameMode].players == 'TvT') {
+            if(gameModes && gameModes[row] && gameModes[row].Players == 'TvT') {
                 json.otherPlayers = [buffer.readIString(), buffer.readIString()]
                 json.unk5 = buffer.readByte()
             }
