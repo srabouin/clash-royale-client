@@ -2,4 +2,7 @@
 config.js
 /saves
 save
-resources
+resources/csv_client
+resources/csv_logic
+resources/locations
+resources/tilemaps

@@ -1,20 +1,21 @@
 const ByteBuffer = require('../../../../utils/bytebuffer-sc')
 const zlib = require('zlib')
 const config = require('../../../../config')
+const fingerprint = require('../../../../resources/fingerprint.json')
 
 module.exports.code = 10101
 
 module.exports.version = 4
 
 module.exports.payload = session => {
-    let buf = new ByteBuffer
+    let buf = new ByteBuffer()
     buf.writeInt32(session.account.scid ? 0 : session.account.id.high)
     buf.writeInt32(session.account.scid ? 0 : session.account.id.low)
     buf.writeIString(session.account.scid ? '' : session.account.pass)
     buf.writeRrsInt32(3)
     buf.writeRrsInt32(0)
     buf.writeRrsInt32(1186)
-    buf.writeIString(config.resourceSha)
+    buf.writeIString(fingerprint.sha)
     buf.writeInt32(0)
     buf.writeIString('4699c1d58f3532c1')
     buf.writeIString('')
