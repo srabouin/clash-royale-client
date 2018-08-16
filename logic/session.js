@@ -20,9 +20,6 @@ class Session {
 
   start() {
     this.send(packets.Handshake)
-    setInterval(() => {
-      this.send(packets.KeepAlive)
-    }, 10000)
   }
 
   send(packet, params = []) {
@@ -42,7 +39,12 @@ class Session {
     this.parse(message.code, decrypted)
     if (this.saveSession) this.saveSession.message({ code: message.code, payload: decrypted })
 
-    if (message.code === packets.LoginOk.code) setInterval(() => this._ticks += 2, 100)
+    if (message.code === packets.LoginOk.code) {
+      setInterval(() => this._ticks += 2, 100)
+      setInterval(() => {
+        this.send(packets.KeepAlive)
+      }, 10000)
+    }
   }
 
   parse(code, buffer) {

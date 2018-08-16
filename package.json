@@ -2,9 +2,13 @@
   "name": "clash-royale-client",
   "version": "2.0.2",
   "dependencies": {
+    "async": "^2.6.1",
+    "axios": "^0.18.0",
     "bytebuffer": "^5.0.1",
     "inquirer": "^6.0.0",
+    "lzma": "^2.3.2",
     "prettyjson": "^1.2.1",
+    "progress": "^2.0.0",
     "sc-tweetnacl": "git+https://github.com/aperpen/sc-tweetnacl.git"
   }
 }
