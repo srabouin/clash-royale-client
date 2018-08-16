@@ -3,7 +3,8 @@ const fs = require('fs')
 const async = require('async')
 const ProgressBar = require('progress')
 const axios = require('axios')
-const my_lzma = require("lzma")
+const my_lzma = require('lzma')
+const parse = require('csv-parse')
 
 module.exports.code = 20103
 
@@ -62,8 +63,39 @@ module.exports.callback = (session, data) => {
 
                   newBuffer.compact()
 
-                  fs.writeFileSync('./resources/' + file, my_lzma.decompress(newBuffer.toBuffer()))
-                  done()
+                  decompressed = my_lzma.decompress(newBuffer.toBuffer())
+                  fs.writeFileSync('./resources/' + file, decompressed)
+
+                  // we need this for chat battle message
+                  if(file == 'csv_logic/game_modes.csv') {
+                      parse(decompressed, function(err, csv) {
+                          let header = {}
+                          csv[0].forEach(function(col, i) {
+                              header[col] = i
+                          })
+                          let gameMode = 72000000
+                          csv.slice(2).forEach(function(row) {
+                              if(row[header.Name]) {
+                                  if(!config.gameModes) {
+                                      config.gameModes = {}
+                                  }
+                                  config.gameModes[gameMode] = {
+                                      name: row[header.Name],
+                                      overtimeSeconds: row[header.OvertimeSeconds],
+                                      players: row[header.Players],
+                                      elixirProductionMultiplier: row[header.ElixirProductionMultiplier],
+                                      elixirProductionOvertimeMultiplier: row[header.ElixirProductionOvertimeMultiplier],
+                                      battleStartCooldown: row[header.BattleStartCooldown]
+                                  }
+                                  gameMode++
+                              }
+
+                          })
+                          done()
+                      })
+                  } else {
+                      done()
+                  }
               })
               .catch(function (error) {
                   done(error)

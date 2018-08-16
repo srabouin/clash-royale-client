@@ -1,3 +1,5 @@
+const config = require('../../../../config.js')
+
 module.exports.decode = buffer => {
     let json = { unks: [] }
 
@@ -27,7 +29,7 @@ module.exports.decode = buffer => {
 
         case 2: // special event live
             // these are the TvT Friendly game modes
-            if([72000014, 72000022, 72000023, 72000029, 72000030, 72000034, 72000036, 72000038, 72000040, 72000049, 72000051, 72000053, 72000055, 72000057].includes(json.gameMode) ) {
+            if(config.gameModes && config.gameModes[json.gameMode] && config.gameModes[json.gameMode].players == 'TvT') {
                 json.otherPlayers = [buffer.readIString(), buffer.readIString()]
                 json.unk5 = buffer.readByte()
             }
