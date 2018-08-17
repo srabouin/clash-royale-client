@@ -3,6 +3,6 @@ const ClanChat = require('../../component/ClanChat')
 
 module.exports.code = 23174
 
-module.exports.handle = (client, data) => {
-    ClanChat.handle(client, data)
+module.exports.handle = (session, data) => {
+    ClanChat.handle(session, data)
 }

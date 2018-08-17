@@ -8,6 +8,7 @@ class Session {
   constructor() {
     this.crypto = new Crypto()
     this._ticks = 0
+    this.packets = packets
   }
 
   get account() {

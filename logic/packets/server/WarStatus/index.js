@@ -1,6 +1,7 @@
 const ByteBuffer = require('../../../../utils/bytebuffer-sc')
 
 module.exports.code = 29467
+module.exports.hidden = true
 
 module.exports.decode = (payload) => {
   buffer = ByteBuffer.fromBinary(payload)
