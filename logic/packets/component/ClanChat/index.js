@@ -25,7 +25,8 @@ const events = {
     ACCEPTED: 2,
     JOINED: 3,
     LEFT: 4,
-    PROMOTED: 5
+    PROMOTED: 5,
+    DEMOTED: 6
 }
 
 module.exports.decode = buffer => {

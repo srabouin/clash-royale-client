@@ -21,21 +21,19 @@ module.exports.decode = buffer => {
         json.unks.push(buffer.readByte())
     }
 
-    let file = buffer.readRrsInt32()
-    let row = buffer.readRrsInt32()
-    json.gameMode = file * 1000000 + row
+    json.gameMode = { high: buffer.readRrsInt32(), low: buffer.readRrsInt32() }
     json.type = buffer.readByte()
 
     switch(json.type) {
         case 0: // normal game
-            if(gameModes && gameModes[row] && gameModes[row].Players == 'TvT') {
+            if(gameModes && gameModes[json.gameMode.low] && gameModes[json.gameMode.low].Players == 'TvT') {
                 json.otherPlayers = [buffer.readIString(), buffer.readIString()]
                 json.unks.push(buffer.readByte())
             }
             break
 
         case 2: // special event live
-            if(gameModes && gameModes[row] && gameModes[row].Players == 'TvT') {
+            if(gameModes && gameModes[json.gameMode.low] && gameModes[json.gameMode.low].Players == 'TvT') {
                 json.otherPlayers = [buffer.readIString(), buffer.readIString()]
                 json.unk5 = buffer.readByte()
             }

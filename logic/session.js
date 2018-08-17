@@ -64,7 +64,7 @@ class Session {
         }
       }
       if (typeof packets[code].callback == 'function') packets[code].callback(this, data)
-      if (typeof plugins[code].handle == 'function') plugins[code].handle(this, data)
+      if (plugins[code] && typeof plugins[code].handle == 'function') plugins[code].handle(this, data)
     }
   }
 }
