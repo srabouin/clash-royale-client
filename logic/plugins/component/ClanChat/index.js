@@ -23,9 +23,6 @@ module.exports.handle = (client, message) => {
         log(chalk`[{bold ${message.senderNick}}] is looking for a partner`)
       }
       break
-    case ids.BATTLE_FINISHED:
-      console.log(message)
-      break
     case ids.CHAT:
       log(chalk`[{bold ${message.senderNick}}] ${message.data.message}`)
       break
