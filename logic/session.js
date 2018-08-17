@@ -2,10 +2,11 @@ const prettyjson = require('prettyjson')
 const Crypto = require('../crypto')
 const tag2id = require('../utils/tag2id')
 const packets = require('./packets')
+const plugins = require('./plugins')
 
 class Session {
   constructor() {
-    this.crypto = new Crypto
+    this.crypto = new Crypto()
     this._ticks = 0
   }
 
@@ -54,13 +55,16 @@ class Session {
       if (typeof packets[code].decode == 'function') {
         try {
           data = packets[code].decode(buffer)
-          console.log(prettyjson.render(data))
+          if(!packets[code].hidden){
+            console.log(prettyjson.render(data))
+          }
         } catch (e) {
           console.log('✖️ Error decoding ' + code + ' packet')
           console.log(e)
         }
       }
       if (typeof packets[code].callback == 'function') packets[code].callback(this, data)
+      if (typeof plugins[code].handle == 'function') plugins[code].handle(this, data)
     }
   }
 }

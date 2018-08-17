@@ -26,7 +26,6 @@ module.exports.decode = buffer => {
     json.gameMode = file * 1000000 + row
     json.type = buffer.readByte()
 
-
     switch(json.type) {
         case 0: // normal game
             if(gameModes && gameModes[row] && gameModes[row].Players == 'TvT') {

@@ -8,3 +8,5 @@ module.exports.decode = payload => {
 
     return ClanChat.decode(buffer)
 }
+
+module.exports.hidden = true

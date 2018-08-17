@@ -4,6 +4,7 @@ const prettyjson = require('prettyjson')
 const consoleUtil = require('./utils/console')
 const config = require('./config')
 const packets = require('./logic/packets')
+const plugins = require('./logic/plugins')
 
 const savedSessions = fs.readdirSync(config.savePath).sort()
 
@@ -54,8 +55,14 @@ if (savedSessions.length > 0) {
 
         for (let file of files) {
           console.log('[*] Replaying', file)
-          let payload = Buffer.from(fs.readFileSync(path + '/' + file, { encoding: 'hex' }), 'hex')
-          console.log(prettyjson.render(packets[answers.message].decode(payload)))
+          let data = packets[answers.message].decode(Buffer.from(fs.readFileSync(path + '/' + file, { encoding: 'hex' }), 'hex'))
+
+          if(!packets[answers.message].hidden) {
+            console.log(prettyjson.render(data))
+          }
+          if (typeof plugins[answers.message].handle == 'function') {
+            plugins[answers.message].handle(this, data)
+          }
         }
       } else {
         console.log('[!] Selected packet has not decode function')

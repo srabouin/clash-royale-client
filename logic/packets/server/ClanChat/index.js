@@ -15,4 +15,4 @@ module.exports.decode = payload => {
     return json
 }
 
-// module.exports.disabled = true
+module.exports.hidden = true
