@@ -12,7 +12,7 @@ module.exports.decode = buffer => {
 
     json.senderTrophies = buffer.readRrsInt32()
 
-    if(buffer.readByte()) { // we have a partner
+    if(buffer.readByte() == 1) { // we have a partner
         json.player2.unk1 = buffer.readByte() // 00
         json.player2.unk2 = buffer.readByte() // 02
         json.player2.id = buffer.readInt64()
@@ -26,12 +26,16 @@ module.exports.decode = buffer => {
     json.gameMode = file * 1000000 + row
     json.type = buffer.readByte()
 
+
     switch(json.type) {
         case 0: // normal game
+            if(gameModes && gameModes[row] && gameModes[row].Players == 'TvT') {
+                json.otherPlayers = [buffer.readIString(), buffer.readIString()]
+                json.unks.push(buffer.readByte())
+            }
             break
 
         case 2: // special event live
-            // these are the TvT Friendly game modes
             if(gameModes && gameModes[row] && gameModes[row].Players == 'TvT') {
                 json.otherPlayers = [buffer.readIString(), buffer.readIString()]
                 json.unk5 = buffer.readByte()
@@ -40,6 +44,7 @@ module.exports.decode = buffer => {
 
         case 8: // special event not filled
         case 9: // special event filled
+
             json.unks.push(buffer.readByte())
             json.unks.push(buffer.readByte())
             json.eventInfo = {
@@ -51,7 +56,8 @@ module.exports.decode = buffer => {
                 unk2: buffer.readInt64(),
                 buttonText2: buffer.readIString(),
                 details: buffer.readIString(),
-                unk3: buffer.readByte()
+                unk3: buffer.readByte(),
+                unk4: buffer.readByte()
             }
             break
 
