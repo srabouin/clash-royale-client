@@ -33,7 +33,7 @@ class Session {
     header.writeUInt16BE(packet.version || 0, 5)
 
     this.server.write(Buffer.concat([header, Buffer.from(crypted)]))
-    console.log('📤 ' + (packets[packet.code] && packets[packet.code].name ? packets[packet.code].name : code))
+    console.log('📤  ' + (packets[packet.code] && packets[packet.code].name ? packets[packet.code].name : code))
   }
 
   receive(message) {
@@ -50,7 +50,7 @@ class Session {
   }
 
   parse(code, buffer) {
-    console.log('📥 ' + (packets[code] && packets[code].name ? packets[code].name : code))
+    console.log('📥  ' + (packets[code] && packets[code].name ? packets[code].name : code))
     if (packets[code] && !packets[code].disabled) {
       let data = null
       if (typeof packets[code].decode == 'function') {
@@ -60,7 +60,7 @@ class Session {
             console.log(prettyjson.render(data))
           }
         } catch (e) {
-          console.log('✖️ Error decoding ' + code + ' packet')
+          console.log('✖️  Error decoding ' + code + ' packet')
           console.log(e)
         }
       }

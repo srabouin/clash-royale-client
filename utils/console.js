@@ -34,7 +34,7 @@ module.exports.prompt = questions => {
 
 process.stdin.setRawMode(true)
 process.stdin.on('keypress', (str, key) => {
-  if (__state === states.FREE && key.sequence === '\u001bc') {
+  if (__state === states.FREE && key.sequence === '\u0001') {
     module.exports.prompt({
       type: 'input',
       name: 'command',
