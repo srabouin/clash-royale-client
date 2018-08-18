@@ -17,4 +17,6 @@ module.exports.payload = (session, params) => {
     return buf.buffer
 }
 
+module.exports.hidden = true
+
 // module.exports.disabled = true

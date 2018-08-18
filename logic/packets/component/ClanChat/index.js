@@ -32,10 +32,12 @@ const events = {
 module.exports.decode = buffer => {
 
     let entry = {}
-    entry.id = buffer.readRrsInt32()
+    entry.type = buffer.readRrsInt32()
 
-    buffer.readRrsInt32() // ENTRY ID
-    buffer.readRrsInt32() // ENTRY ID
+    entry.id = {
+      high: buffer.readRrsInt32(),
+      low: buffer.readRrsInt32()
+    }
     entry.sender = {
         high: buffer.readRrsInt32(),
         low: buffer.readRrsInt32()
@@ -51,7 +53,7 @@ module.exports.decode = buffer => {
     buffer.readByte()
     buffer.readByte()
     buffer.readByte()
-    switch (entry.id) {
+    switch (entry.type) {
         case ids.BATTLE:
             entry.data = battle.decode(buffer)
             break
@@ -80,7 +82,7 @@ module.exports.decode = buffer => {
             entry.data = deckShare.decode(buffer)
             break
         default:
-            console.log('unknown id: ' + entry.id)
+            console.log('unknown type: ' + entry.type)
     }
 
     return entry

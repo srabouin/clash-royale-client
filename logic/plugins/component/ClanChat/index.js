@@ -25,7 +25,7 @@ const events = {
 }
 
 module.exports.handle = (session, message) => {
-  switch (message.id) {
+  switch (message.type) {
     case ids.EVENT:
       log(chalk`⚠️  {bold ${message.senderNick}} ${events[message.data.id].replace('%2', message.data.initiatorNick)}`)
       break
@@ -54,7 +54,6 @@ module.exports.handle = (session, message) => {
         log(chalk`🎯  {bold ${battle.player0.name}} vs {bold ${battle.player1.name}} - {bold ${battle.player0.stars}-${battle.player1.stars}}`)
       }
 
-      session.send(session.packets.FetchReplay, { id: message.data.replay, server: message.data.server})
 
       break
     case ids.CHAT:
