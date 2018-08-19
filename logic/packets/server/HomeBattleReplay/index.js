@@ -1,6 +1,8 @@
+const ByteBuffer = require('../../../../utils/bytebuffer-sc')
+const zlib = require('zlib')
 
 module.exports.code = 21021
-module.exports.handle = payload => {
+module.exports.decode = payload => {
     buffer = ByteBuffer.fromBinary(payload)
 
     let json = {

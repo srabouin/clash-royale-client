@@ -2,6 +2,7 @@ const log = console.log
 const chalk = require('chalk')
 const spells = require('../../../../logic/spells')
 const gameModes = require('../../../../utils/csv')('csv_logic/game_modes.csv')
+const scid = require('../../../../utils/scid')
 
 const ids = {
   DONATION: 1,
@@ -38,7 +39,7 @@ module.exports.handle = (session, message) => {
       break
     case ids.BATTLE_FINISHED:
       let battle = JSON.parse(message.data.battleJson)
-      let gamemode = battle.game_config.gamemode - 72000000
+      let gamemode = scid.toHiLo(battle.game_config.gamemode)
 
       if(!battle.player0.stars) {
         battle.player0.stars = 0
@@ -48,7 +49,7 @@ module.exports.handle = (session, message) => {
         battle.player1.stars = 0
       }
 
-      if(gameModes[gamemode].Players == 'TvT') {
+      if(gameModes[gamemode.low].Players == 'TvT') {
         log(chalk`🎯  {bold ${battle.player0.name}} + {bold ${battle.player2.name}} vs {bold ${battle.player1.name}} + {bold ${battle.player3.name}} - {bold ${battle.player0.stars}-${battle.player1.stars}}`)
       } else {
         log(chalk`🎯  {bold ${battle.player0.name}} vs {bold ${battle.player1.name}} - {bold ${battle.player0.stars}-${battle.player1.stars}}`)
