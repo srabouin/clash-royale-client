@@ -12,21 +12,13 @@ const my_lzma = require('lzma')
 const ByteBuffer = require('./utils/bytebuffer-sc')
 const fs = require('fs')
 
-consoleUtil
-  .prompt({
-    type: 'list',
-    name: 'account',
-    message: 'Select account',
-    choices: config.credentials.map(account => account.name ? account.name : account.tag),
-    pageSize: 10
-  })
-.then(answers => {
+function startClient(account) {
     let saveSession = null
     const packetizer = new Packetizer()
     const gameserver = new net.Socket()
 
     session.server = gameserver
-    session.account = config.credentials.find(account => account.name === answers.account)
+    session.account = account
 
     if (process.argv.indexOf('--save') > -1 || process.argv.indexOf('-s') > -1) {
       session.saveSession = new SaveSession(config.savePath)
@@ -82,7 +74,7 @@ consoleUtil
                 }
 
                 fs.writeFileSync('./config.js', 'module.exports = ' + JSON.stringify(config, null, 3))
-                
+
                 gameserver.connect(9339, 'game.clashroyaleapp.com', () => {
                     session.start()
                 })
@@ -105,6 +97,23 @@ consoleUtil
           session.receive(message)
         })
     })
-})
+}
+
+if(config.credentials.length > 1) {
+    consoleUtil
+      .prompt({
+        type: 'list',
+        name: 'account',
+        message: 'Select account',
+        choices: config.credentials.map(account => account.name ? account.name : account.tag),
+        pageSize: 10
+      })
+    .then(answers => {
+        startClient(config.credentials.find(account => account.name === answers.account))
+    })
+} else {
+    startClient(config.credentials[0])
+}
+
 
 module.exports.account = {}
