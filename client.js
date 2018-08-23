@@ -1,6 +1,5 @@
 const net = require('net')
 const Packetizer = require('./utils/packetizer')
-const consoleUtil = require('./utils/console')
 const SaveSession = require('./utils/save')
 const config = require('./config')
 const session = require('./logic/session')
@@ -100,6 +99,8 @@ function startClient(account) {
 }
 
 if(config.credentials.length > 1) {
+    const consoleUtil = require('./utils/console')
+
     consoleUtil
       .prompt({
         type: 'list',
